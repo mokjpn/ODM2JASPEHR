@@ -16,6 +16,7 @@ dist/
 
 # Local outputs
 out/
+examples/
 
 # OS/editor noise
 .DS_Store
