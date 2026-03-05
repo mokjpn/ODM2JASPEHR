@@ -100,4 +100,15 @@ pytest -q
 
 ## 7. ライセンス / License
 
-未設定（必要に応じて追加してください） / Not specified yet.
+MIT License  
+See [LICENSE](./LICENSE).
+
+Copyright (c) 2026 Masafumi Okada
+
+## 8. 貢献表記 / Attribution
+
+### 日本語
+本リポジトリの実装には、Masafumi Okada による設計・開発に加えて、OpenAI Codex（GPT-5）によるAI支援コード生成・リファクタリングが含まれます。
+
+### English
+This repository includes implementation work designed and developed by Masafumi Okada, with AI-assisted code generation and refactoring support from OpenAI Codex (GPT-5).
