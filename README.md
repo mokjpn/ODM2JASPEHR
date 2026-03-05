@@ -89,13 +89,85 @@ odm2jaspehr define.xml \
 ## 6. 開発用テスト / Dev test
 
 ### 日本語
+開発時は次の順で確認してください。
+
+1. 依存関係インストール
+```bash
+pip install -e .[dev]
+```
+
+2. ユニットテスト実行
 ```bash
 pytest -q
 ```
 
+3. スモークテスト（サンプル変換）
+```bash
+odm2jaspehr examples/sample_odm.xml \
+  --output-dir out \
+  --canonical-base http://example.org/fhir \
+  --codelist-mode option \
+  --choice-item-control radio-button
+```
+
+4. 出力の最低限チェック（`linkId` 重複なし）
+```bash
+python - <<'PY'
+import json
+from collections import Counter
+from pathlib import Path
+q = json.loads(Path("out/FORM.VITALS.questionnaire.json").read_text())
+ids = []
+stack = list(q.get("item", []))
+while stack:
+    item = stack.pop()
+    if item.get("linkId"):
+        ids.append(item["linkId"])
+    stack.extend(item.get("item", []))
+dup = [k for k, v in Counter(ids).items() if v > 1]
+print("duplicate linkId:", len(dup))
+PY
+```
+
 ### English
+Use this sequence in development:
+
+1. Install dev dependencies
+```bash
+pip install -e .[dev]
+```
+
+2. Run unit tests
 ```bash
 pytest -q
+```
+
+3. Run a smoke conversion
+```bash
+odm2jaspehr examples/sample_odm.xml \
+  --output-dir out \
+  --canonical-base http://example.org/fhir \
+  --codelist-mode option \
+  --choice-item-control radio-button
+```
+
+4. Sanity-check output (`linkId` uniqueness)
+```bash
+python - <<'PY'
+import json
+from collections import Counter
+from pathlib import Path
+q = json.loads(Path("out/FORM.VITALS.questionnaire.json").read_text())
+ids = []
+stack = list(q.get("item", []))
+while stack:
+    item = stack.pop()
+    if item.get("linkId"):
+        ids.append(item["linkId"])
+    stack.extend(item.get("item", []))
+dup = [k for k, v in Counter(ids).items() if v > 1]
+print("duplicate linkId:", len(dup))
+PY
 ```
 
 ## 7. ライセンス / License
